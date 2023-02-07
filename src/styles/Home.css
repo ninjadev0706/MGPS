@@ -1,0 +1,29 @@
+#home {
+  /* height: calc(100vh - 220px); */
+}
+
+a {
+  color: #ffffff;
+}
+
+#card-list-header-text {
+  color: #ffffff;
+  font-family: "Comic Sans MS", cursive;
+  font-size: 24px;
+  margin-top: 80px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+#list-container {
+  /* border: 1px solid red; */
+  margin-top: 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content:center;
+  margin-bottom: 100px;
+}
+.disabled .disabled:hover{
+  background-color: #41444E !important;
+}
