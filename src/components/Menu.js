@@ -62,7 +62,7 @@ const Menu = () => {
           try {
             await ethereum.request({
               method: "wallet_switchEthereumChain",
-              params: [{ chainId: "0x38" }],
+              params: [{ chainId: "0x89" }],
             });
           } catch (switchError) {
             if (switchError.code === 4902) {
@@ -71,15 +71,15 @@ const Menu = () => {
                   method: "wallet_addEthereumChain",
                   params: [
                     {
-                      chainId: "0x38",
-                      chainName: "Binance Smart Chain",
+                      chainId: "0x89",
+                      chainName: "Polygon Mainnet",
                       nativeCurrency: {
-                        name: "BNB",
-                        symbol: "BNB",
+                        name: "MATIC",
+                        symbol: "MATIC",
                         decimals: 18,
                       },
-                      rpcUrls: ["https://bsc-dataseed1.binance.org/"],
-                      blockExplorerUrls: ["https://bscscan.com"],
+                      rpcUrls: ["https://polygon-rpc.com/"],
+                      blockExplorerUrls: ["https://polygonscan.com/"],
                     },
                   ],
                 });
@@ -103,7 +103,8 @@ const Menu = () => {
             <div className="col-lg-12">
               <nav className="navbar navbar-expand-lg align-items-center">
                 <a className="navbar-brand" href="/">
-                  <img src="/images/logo.svg" alt="" className="img-fluid" />
+                  {/* <img src="/images/logo.svg" alt="" className="img-fluid" /> */}
+                  METAGPS
                 </a>
                 <button
                   className="navbar-toggler"

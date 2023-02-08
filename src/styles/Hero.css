@@ -400,7 +400,7 @@ a.font-dark {
 }
 
 .progress-title .desc {
-  color: #1DA1F2;
+  color: #8e00ffbf;
 }
 
 .progress-title .right {
@@ -449,7 +449,7 @@ a.font-dark {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(90deg, #00D2FF 0%, #3A7BD5 100%);
+  background: linear-gradient(90deg, #8e00ffbf  0%, #c893cf  100%);
   border-radius: 8px 8px 0px 0px;
   padding: 10px 15px;
 }
@@ -458,13 +458,14 @@ a.font-dark {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-right: 5px;
 }
 
 .max-button {
   background: transparent;
-  border: 0.5px solid #1da1f2;
+  border: 0.5px solid #8e00ffbf;
   border-radius: 5px;
-  color: #1da1f3;
+  color: #fff;
   font-weight: 500;
   font-size: 10px;
   padding: 3px 5px;
@@ -494,7 +495,7 @@ a.font-dark {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 5px 12px 5px 0;
+  padding: 5px 5px;
 }
 
 .avax-section:hover {
@@ -517,7 +518,7 @@ a.font-dark {
 }
 
 .amount-button {
-  background: #1DA1F2;
+  background: #8e00ffbf;
   border-radius: 8px;
   border: none;
   color: #ffffff;
@@ -534,7 +535,7 @@ a.font-dark {
 }
 
 .big-order-button {
-  background: #1DA1F2;
+  background: #8e00ffbf;
   border-radius: 8px;
   border: none;
   color: #ffffff;
@@ -950,7 +951,7 @@ a.font-dark {
   .avax-img,
   .avax-letter,
   .ccoin-letter {
-    margin-left: 5px;
+    margin: 0 5px;
     font-size: 20px;
   }
 
