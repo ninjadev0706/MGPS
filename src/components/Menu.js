@@ -103,7 +103,7 @@ const Menu = () => {
             <div className="col-lg-12">
               <nav className="navbar navbar-expand-lg align-items-center">
                 <a className="navbar-brand" href="/">
-                  {/* <img src="/images/logo.svg" alt="" className="img-fluid" /> */}
+                  <img src="/tokens/MGPS.png" className="mr-10" alt="" width="40px" />
                   METAGPS
                 </a>
                 <button

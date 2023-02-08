@@ -1739,9 +1739,9 @@ map {
     margin-top: 30px;
   }
 
-  a.navbar-brand img {
+  /* a.navbar-brand img {
     width: 180px;
-  }
+  } */
 
   header .navbar-toggler-icon {
     width: auto;

@@ -1,7 +1,7 @@
 import Menu from "../components/Menu";
 import PurchaseToken from "../components/PurchaseToken";
 
-const Home = ({ account, promiseData, buyWithBNB, buyWithTokens }) => {
+const Home = ({ account, promiseData, buyWithBNB, buyWithTokens, fetchData, availableSYRF, availableTokenBal }) => {
 
   return (
     <div className="">
@@ -11,6 +11,9 @@ const Home = ({ account, promiseData, buyWithBNB, buyWithTokens }) => {
         promiseData={promiseData}
         buyWithBNB={buyWithBNB}
         buyWithTokens={buyWithTokens}
+        fetchData={fetchData}
+        availableTokenBal={availableTokenBal}
+        availableSYRF={availableSYRF}
       />
     </div>
   );

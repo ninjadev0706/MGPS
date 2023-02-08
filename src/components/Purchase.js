@@ -4,21 +4,18 @@ import { ProgressBar } from "react-bootstrap";
 import BigNumber from "bignumber.js";
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
-import erc20_ABI from "../config/abi/erc20.json";
+
 import Calendar from "./Calendar";
 
-let syrfAddr = "0xEA22d7E2010ed681e91D405992Ac69B168cb8028";
-
-const Purchase = ({ promiseData, buyWithBNB, isEnded, buyWithTokens }) => {
+const Purchase = ({ promiseData, buyWithBNB, isEnded, buyWithTokens, fetchData, availableSYRF, availableTokenBal }) => {
   const { account, library } = useWeb3React();
   const [fromAmount, setFromAmount] = useState(0);
   const [toAmount, setToAmount] = useState(0);
   const [isloading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
-  const [availableTokenBal, setAvailableTokenBal] = useState(0);
-  const [availableSYRF, setAvailableSYRF] = useState(0);
 
   promiseData["total_token"] = 20000000;
+  promiseData.icoState = 1;
 
   const progress = (sold, total) => {
     if (sold < total) {
@@ -33,6 +30,7 @@ const Purchase = ({ promiseData, buyWithBNB, isEnded, buyWithTokens }) => {
 
   const clickBuy = async () => {
     setLoading(true);
+
     try {
       await buyWithBNB(Number(fromAmount));
     } catch (err) {
@@ -50,35 +48,7 @@ const Purchase = ({ promiseData, buyWithBNB, isEnded, buyWithTokens }) => {
     setToAmount(0);
   };
 
-  const fetchData = async () => {
-    const selectedTokenAddr = 0x0000000000000000000000000000000000000000;
-    const { ethereum } = window;
-
-    if (ethereum && account) {
-      let signer;
-      let _provider;
-      if (library) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        _provider = provider;
-        signer = provider.getSigner();
-      } else {
-        const provider = new ethers.providers.JsonRpcProvider(
-          "https://polygon-rpc.com/"
-        );
-        _provider = provider;
-        signer = provider.getSigner(selectedTokenAddr);
-      }
-
-      const balance = await _provider.getBalance(account);
-      const balanceInEth = ethers.utils.formatEther(balance);
-      console.log("balanceInEth => ", Number(balanceInEth).toFixed(4))
-      setAvailableTokenBal((((Math.floor(Number(balanceInEth).toFixed(4) * 10000) - 30) > 0) && Math.floor(Number(balanceInEth).toFixed(4) * 10000) - 30) / 10000);
-
-      const SYRFContract = new ethers.Contract(syrfAddr, erc20_ABI, signer);
-      const availableToken = await SYRFContract.balanceOf(account);
-      setAvailableSYRF((Math.floor(new BigNumber(availableToken._hex).dividedBy(10 ** 18).toNumber().toFixed(2) * 100)) / 100);
-    }
-  }
+  
 
   useEffect(() => {
     fetchData();
@@ -165,18 +135,18 @@ const Purchase = ({ promiseData, buyWithBNB, isEnded, buyWithTokens }) => {
                 value={fromAmount}
                 disabled={(account && promiseData.icoState === 1) ? false : true}
                 readOnly={account ? false : true}
-                // onChange={(e) => {
-                //   setToAmount((e.target.value * selectedTokenPrice * (10 ** 2) / promiseData.syrfPrice).toFixed(4));
-                //   setFromAmount(e.target.value);
-                // }}
+                onChange={(e) => {
+                  setToAmount((e.target.value * promiseData["exchangeRate"]).toFixed(4));
+                  setFromAmount(e.target.value);
+                }}
               />
               <div className="max-button-section">
                 <button
                   className="max-button"
-                  // onClick={() => {
-                  //   setFromAmount(availableTokenBal);
-                  //   setToAmount((availableTokenBal * selectedTokenPrice * (10 ** 2) / promiseData.syrfPrice).toFixed(4));
-                  // }}
+                  onClick={() => {
+                    setFromAmount(availableTokenBal);
+                    setToAmount((availableTokenBal * promiseData["exchangeRate"]).toFixed(4));
+                  }}
                 >
                   MAX
                 </button>
@@ -205,13 +175,13 @@ const Purchase = ({ promiseData, buyWithBNB, isEnded, buyWithTokens }) => {
               placeholder="0.0"
               value={toAmount}
               readOnly={(account && !isEnded) ? false : true}
-              // onChange={(e) => {
-              //   setFromAmount((e.target.value * (promiseData.syrfPrice / (10 ** 2)) / selectedTokenPrice).toFixed(4));
-              //   setToAmount(e.target.value);
-              // }}
+              onChange={(e) => {
+                setFromAmount((e.target.value / promiseData["exchangeRate"]).toFixed(4));
+                setToAmount(e.target.value);
+              }}
             />
             <div className="ccoin-section font-non-nulshock t-grey3 fs-25">
-              <img alt="coin" className="ccoin-img" src="./tokens/USDC.png" />
+              <img alt="coin" className="ccoin-img" src="./tokens/MGPS.png" />
               <p className="ccoin-letter ml-20">MGPS</p>
             </div>
           </div>
@@ -249,19 +219,30 @@ const Purchase = ({ promiseData, buyWithBNB, isEnded, buyWithTokens }) => {
                         ) :
                           <>
                             {
-                              !isloading ?
-                                <button
-                                  className="big-order-button font-non-nulshock fs-30"
-                                  onClick={clickBuy}
-                                >
-                                  Complete Order
-                                </button>
+                              fromAmount < promiseData["minAmt"] ?
+                                <>
+                                  <button className="insufficient-button font-non-nulshock fs-30">
+                                    Minium Amount is 1 MATIC
+                                  </button>
+                                </>
                                 :
-                                <button
-                                  className="big-order-button font-non-nulshock fs-30"
-                                >
-                                  Ordering ...
-                                </button>
+                                <>
+                                  {
+                                    !isloading ?
+                                      <button
+                                        className="big-order-button font-non-nulshock fs-30"
+                                        onClick={clickBuy}
+                                      >
+                                        Complete Order
+                                      </button>
+                                      :
+                                      <button
+                                        className="big-order-button font-non-nulshock fs-30"
+                                      >
+                                        Ordering ...
+                                      </button>
+                                  }
+                                </>
                             }
                           </>
                         }

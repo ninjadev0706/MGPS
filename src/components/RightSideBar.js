@@ -6,7 +6,10 @@ const RightSideBar = ({
   promiseData,
   approve_AVAX,
   buyWithBNB,
-  buyWithTokens
+  buyWithTokens,
+  fetchData,
+  availableSYRF,
+  availableTokenBal
 }) => {
 
   return (
@@ -14,7 +17,13 @@ const RightSideBar = ({
       <div className={account ? "rightsidebar rightside-effect" : "rightsidebar dropfilter"}>
         <div className="flex-column alignCenter rightsidebar-content">
           <div>
-            <Purchase promiseData={promiseData} buyWithBNB={buyWithBNB} buyWithTokens={buyWithTokens} />
+            <Purchase promiseData={promiseData}
+              buyWithBNB={buyWithBNB}
+              buyWithTokens={buyWithTokens}
+              fetchData={fetchData}
+              availableTokenBal={availableTokenBal}
+              availableSYRF={availableSYRF}
+            />
           </div>
         </div>
       </div>
