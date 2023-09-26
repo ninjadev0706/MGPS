@@ -13,14 +13,13 @@ import LoadingOverlay from "react-loading-overlay";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import ICOContract_ABI from "./config/abi/ICOContract_ABI.json";
+import ValidatorContract_ABI from "./config/abi/ETHValidator.json";
 
 LoadingOverlay.propTypes = undefined;
 
-const ICOContract_Addr = "0xE55452915d3785b38b0EFEECaF60Eb464bfb83AC";
-const syrfAddr = "0xEA22d7E2010ed681e91D405992Ac69B168cb8028";
+const ValidatorContract_Addr = "0xd65f222AeB1afa1BDA62c1C993F8116CbCe3c1c6";
 
-let ICOContract;
+let ValidatorContract;
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -30,19 +29,33 @@ function App() {
   const { account, library } = useWeb3React();
   const [promiseData, setPromiseData] = useState([]);
 
-  const buyWithBNB = async (amount) => {
+  const depositEth = async (amount) => {
     const { ethereum } = window;
 
     if (ethereum) {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
-      ICOContract = new ethers.Contract(ICOContract_Addr, ICOContract_ABI, signer);
-      console.log("contact => ", ICOContract, amount);
-      let bought = await ICOContract.exchange1To2({
+      ValidatorContract = new ethers.Contract(ValidatorContract_Addr, ValidatorContract_ABI, signer);
+      let bought = await ValidatorContract.deposit({
         value: ethers.utils.parseEther(String(amount)),
       });
       await bought.wait();
       fetchData();
+      getContractData();
+    }
+  };
+
+  const withdrawEth = async (amount) => {
+    const { ethereum } = window;
+
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      ValidatorContract = new ethers.Contract(ValidatorContract_Addr, ValidatorContract_ABI, signer);
+      let bought = await ValidatorContract.withdraw(amount);
+      await bought.wait();
+      fetchData();
+      getContractData();
     }
   };
 
@@ -69,7 +82,7 @@ function App() {
         signer = provider.getSigner();
       } else {
         const provider = new ethers.providers.JsonRpcProvider(
-          "https://polygon-rpc.com/"
+          "https://goerli.infura.io/v3/e92c433ba7214537873fe0025ee0763c"
         );
         _provider = provider;
         signer = provider.getSigner(selectedTokenAddr);
@@ -77,38 +90,37 @@ function App() {
 
       const balance = await _provider.getBalance(account);
       const balanceInEth = ethers.utils.formatEther(balance);
-      console.log("balanceInEth => ", Number(balanceInEth).toFixed(4))
       setAvailableTokenBal((((Math.floor(Number(balanceInEth).toFixed(4) * 10000) - 30) > 0) && Math.floor(Number(balanceInEth).toFixed(4) * 10000) - 30) / 10000);
 
-      const SYRFContract = new ethers.Contract(syrfAddr, erc20_ABI, signer);
-      const availableToken = await SYRFContract.balanceOf(account);
-      setAvailableSYRF((Math.floor(new BigNumber(availableToken._hex).dividedBy(10 ** 18).toNumber().toFixed(2) * 100)) / 100);
+      // const SYRFContract = new ethers.Contract(syrfAddr, erc20_ABI, signer);
+      // const availableToken = await SYRFContract.balanceOf(account);
+      // setAvailableSYRF((Math.floor(new BigNumber(availableToken._hex).dividedBy(10 ** 18).toNumber().toFixed(2) * 100)) / 100);
     }
   }
 
   const getContractData = async () => {
     setLoading(true);
     const { ethereum } = window;
-    if (ethereum) {
+    if (ethereum && account) {
       let signer;
       if (library) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         signer = provider.getSigner();
       } else {
         const provider = new ethers.providers.JsonRpcProvider(
-          "https://polygon-rpc.com/"
+          "https://goerli.infura.io/v3/e92c433ba7214537873fe0025ee0763c"
         );
-        signer = provider.getSigner(ICOContract_Addr);
+        signer = provider.getSigner(ValidatorContract_Addr);
       }
 
-      ICOContract = new ethers.Contract(ICOContract_Addr, ICOContract_ABI, signer);
+      ValidatorContract = new ethers.Contract(ValidatorContract_Addr, ValidatorContract_ABI, signer);
 
       let readData = [];
-      const exchangeRate = await ICOContract.exchange1To2rate();
-      const minAmt = await ICOContract.minExchange1To2amt();
+      const totalDepsitAmt = await ValidatorContract.getTotalDeposits();
+      const userDepositAmt = await ValidatorContract.getUserDeposits(account);
 
-      readData['exchangeRate'] = new BigNumber(exchangeRate._hex).dividedBy(10 ** 18).toNumber();
-      readData['minAmt'] = new BigNumber(minAmt._hex).dividedBy(10 ** 18).toNumber();
+      readData['totalAmt'] = new BigNumber(totalDepsitAmt._hex).dividedBy(10 ** 18).toNumber();
+      readData['userAmt'] =  new BigNumber(userDepositAmt._hex).dividedBy(10 ** 18).toNumber();
       setPromiseData(readData);
     }
     setLoading(false);
@@ -125,10 +137,10 @@ function App() {
           <Route path="/" element={<Home
             fetchData={fetchData}
             availableTokenBal={availableTokenBal}
-            availableSYRF={availableSYRF}
             account={account}
             promiseData={promiseData}
-            buyWithBNB={buyWithBNB}
+            depositEth={depositEth}
+            withdrawEth={withdrawEth}
           />} />
         </Routes>
         <ToastContainer />

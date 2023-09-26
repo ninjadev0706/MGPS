@@ -62,7 +62,7 @@ const Menu = () => {
           try {
             await ethereum.request({
               method: "wallet_switchEthereumChain",
-              params: [{ chainId: "0x89" }],
+              params: [{ chainId: "0x5" }],
             });
           } catch (switchError) {
             if (switchError.code === 4902) {
@@ -71,15 +71,15 @@ const Menu = () => {
                   method: "wallet_addEthereumChain",
                   params: [
                     {
-                      chainId: "0x89",
+                      chainId: "0x5",
                       chainName: "Polygon Mainnet",
                       nativeCurrency: {
-                        name: "MATIC",
-                        symbol: "MATIC",
+                        name: "GoerliETH",
+                        symbol: "GoerliETH",
                         decimals: 18,
                       },
-                      rpcUrls: ["https://polygon-rpc.com/"],
-                      blockExplorerUrls: ["https://polygonscan.com/"],
+                      rpcUrls: ["https://goerli.infura.io/v3/e92c433ba7214537873fe0025ee0763c"],
+                      blockExplorerUrls: ["https://goerli.etherscan.io"],
                     },
                   ],
                 });
@@ -102,10 +102,10 @@ const Menu = () => {
           <div className="row ">
             <div className="col-lg-12">
               <nav className="navbar navbar-expand-lg align-items-center">
-                <a className="navbar-brand" href="/">
+                {/* <a className="navbar-brand" href="/">
                   <img src="/tokens/MGPS.png" className="mr-10" alt="" width="40px" />
                   METAGPS
-                </a>
+                </a> */}
                 <button
                   className="navbar-toggler"
                   type="button"
@@ -125,7 +125,7 @@ const Menu = () => {
                   id="navbarTogglerDemo02"
                 >
                   <ul className="navbar-nav mt-2 mt-lg-0 ml-auto mx-auto">
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                       <a className="nav-link" href="#home">
                         Home
                       </a>
@@ -155,7 +155,7 @@ const Menu = () => {
                       <a className="nav-link" href="#team">
                         Team
                       </a>
-                    </li>
+                    </li> */}
                     {!isDesktopOrLaptop && (
                       <WalletBtn
                         account={account}

@@ -1,6 +1,6 @@
 import BuyToken from "./BuyToken";
 
-const PurchaseToken = ({ account, promiseData, buyWithBNB, buyWithTokens, fetchData, availableSYRF, availableTokenBal }) => {
+const PurchaseToken = ({ account, promiseData, depositEth, withdrawEth, fetchData, availableTokenBal }) => {
 
   return (
     <section className="main-banner" id="home">
@@ -14,11 +14,10 @@ const PurchaseToken = ({ account, promiseData, buyWithBNB, buyWithTokens, fetchD
                   <BuyToken
                     account={account}
                     promiseData={promiseData}
-                    buyWithBNB={buyWithBNB}
-                    buyWithTokens={buyWithTokens}
+                    depositEth={depositEth}
+                    withdrawEth={withdrawEth}
                     fetchData={fetchData}
                     availableTokenBal={availableTokenBal}
-                    availableSYRF={availableSYRF}
                   />
                 </div>
               </div>

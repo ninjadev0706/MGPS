@@ -3,16 +3,16 @@ import "../styles/Home.css";
 
 
 
-const BuyToken = ({ account, promiseData, buyWithBNB, buyWithTokens, fetchData, availableSYRF, availableTokenBal }) => {
+const BuyToken = ({ account, promiseData, depositEth, withdrawEth, fetchData, availableTokenBal }) => {
 
     return (
-        <RightSideBar account={account}
+        <RightSideBar
+            account={account}
             promiseData={promiseData}
-            buyWithBNB={buyWithBNB}
-            buyWithTokens={buyWithTokens}
+            depositEth={depositEth}
+            withdrawEth={withdrawEth}
             fetchData={fetchData}
             availableTokenBal={availableTokenBal}
-            availableSYRF={availableSYRF}
         />
     );
 };

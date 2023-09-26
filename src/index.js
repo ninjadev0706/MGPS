@@ -6,7 +6,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
-
+import 'aigentx-chat-widget/lib/styles.css';
 
 function getLibrary(provider) {
   const library = new Web3Provider(provider);
